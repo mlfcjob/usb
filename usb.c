@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 {
     ssize_t device_num;
 
-    libusb_context *usb_context; // = malloc(sizeof(libusb_context));
+    libusb_context *usb_context;  
     libusb_device  **devs;       /*pointer to device, used to retrieve a list of devices*/
 
     if (libusb_init(&usb_context) != 0)
