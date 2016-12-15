@@ -60,7 +60,8 @@ void print_dev(libusb_device *dev)
 
     strcpy(usb_device_name, buf_manufacture);
     strcat(usb_device_name, buf_product);
-    printf("usb device name: %s.\n", usb_device_name);
+    if (strncmp(usb_device_name, "Linux", 5) != 0)
+        printf("usb device name: %s.\n", usb_device_name);
 }
 
 char *get_usb_device_info_by_pipe()
