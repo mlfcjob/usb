@@ -15,9 +15,14 @@ void print_dev(libusb_device *dev)
     printf("\n*********************\n");
     printf("Number of possible configurations:%d, ", (int)desc.bNumConfigurations);
     printf("Device class: %d, ", (int)desc.bDeviceClass);
-    printf("VendorID: %d,  ", desc.idVendor);
-    printf("ProductID: %d.\n", desc.idProduct);
-   
+    printf("VendorID: %04x,  ", desc.idVendor);
+    printf("ProductID: %04x.\n", desc.idProduct);
+  
+
+    printf("%04x:%04x (bus %d, device %d).\n",
+			desc.idVendor, desc.idProduct,
+			libusb_get_bus_number(dev), libusb_get_device_address(dev));
+ 
     struct libusb_config_descriptor *config;
     libusb_get_config_descriptor(dev, 0, &config);    
 
@@ -25,6 +30,13 @@ void print_dev(libusb_device *dev)
     const struct libusb_interface *interdesc;
     const struct libusb_endpoint_descriptor *epdesc;
 
+    libusb_device_handle *handle;
+    r = libusb_open(dev, &handle);
+    if (r < 0){
+        fprintf(stdout, "open usb device failed.\n");
+        return;
+    }
+     
 }
 
 int main(int argc, char *argv[])
