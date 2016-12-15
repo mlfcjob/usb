@@ -2,6 +2,15 @@
 #include <stdlib.h>
 #include <libusb-1.0/libusb.h>
 
+#define CHAR_MAX_LEN 256
+
+typedef struct usb_st{
+    char sn[CHAR_MAX_LEN];
+    char productp[CHAR_MAX_LEN];
+    uint16_t pid;
+    uint16_t vid;
+}usb_st;
+
 void print_dev(libusb_device *dev)
 {
     ssize_t i;
@@ -26,6 +35,12 @@ void print_dev(libusb_device *dev)
     struct libusb_config_descriptor *config;
     libusb_get_config_descriptor(dev, 0, &config);    
 
+    //buffer
+    char buf_serial[CHAR_MAX_LEN] ={'\0'};
+    char buf_manufacture[CHAR_MAX_LEN] ={'\0'};
+    char buf_product[CHAR_MAX_LEN] ={'\0'};
+    char usb_device_name[CHAR_MAX_LEN * 2] = {'\0'};
+
     const struct libusb_interface *inter;
     const struct libusb_interface *interdesc;
     const struct libusb_endpoint_descriptor *epdesc;
@@ -36,7 +51,16 @@ void print_dev(libusb_device *dev)
         fprintf(stdout, "open usb device failed.\n");
         return;
     }
-     
+
+    libusb_get_string_descriptor_ascii(handle, desc.iSerialNumber, buf_serial, CHAR_MAX_LEN);
+    printf("serialNumber: %s.\n", buf_serial);
+
+    libusb_get_string_descriptor_ascii(handle, desc.iManufacturer, buf_manufacture, CHAR_MAX_LEN);
+    libusb_get_string_descriptor_ascii(handle, desc.iProduct, buf_product, CHAR_MAX_LEN);
+
+    strcpy(usb_device_name, buf_manufacture);
+    strcat(usb_device_name, buf_product);
+    printf("usb device name: %s.\n", usb_device_name);
 }
 
 char *get_usb_device_info_by_pipe()
@@ -73,7 +97,7 @@ int main(int argc, char *argv[])
     libusb_free_device_list(devs, 1);
     libusb_exit(usb_context);
       
-    get_usb_device_info_by_pipe(); 
+    //get_usb_device_info_by_pipe(); 
     return 0;
 }
 
