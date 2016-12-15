@@ -39,6 +39,17 @@ void print_dev(libusb_device *dev)
      
 }
 
+char *get_usb_device_info_by_pipe()
+{
+    FILE *fp;
+    char buffer[1024] = {'\0'};
+    fp = popen("lsusb", "r");
+    fgets(buffer, sizeof(buffer) / sizeof(buffer[0]), fp);
+    printf("%s", buffer);
+    pclose(fp);
+    return buffer;
+}
+
 int main(int argc, char *argv[])
 {
     ssize_t device_num;
@@ -61,7 +72,8 @@ int main(int argc, char *argv[])
     
     libusb_free_device_list(devs, 1);
     libusb_exit(usb_context);
-       
+      
+    get_usb_device_info_by_pipe(); 
     return 0;
 }
 
