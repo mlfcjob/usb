@@ -62,6 +62,19 @@ void print_dev(libusb_device *dev)
     strcat(usb_device_name, buf_product);
     if (strncmp(usb_device_name, "Linux", 5) != 0)
         printf("usb device name: %s.\n", usb_device_name);
+
+/* according to spice , try get usb info */
+    uint8_t bus, address;
+    int vid, pid;
+
+    bus = libusb_get_bus_number(dev);
+    address = libusb_get_device_address(dev);
+    vid = desc.idVendor;
+    pid = desc.idProduct;
+
+    printf("\n*********From spice ********************.\n");
+    printf("bus:%d, address: %d, format: %d-%d.\n", bus, address, bus, address);
+    printf("ID: 0x%04x,0x%04x.\n", vid, pid);
 }
 
 char *get_usb_device_info_by_pipe()
