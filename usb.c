@@ -26,7 +26,8 @@ void print_dev(libusb_device *dev)
     printf("Device class: %d, ", (int)desc.bDeviceClass);
     printf("VendorID: %04x,  ", desc.idVendor);
     printf("ProductID: %04x.\n", desc.idProduct);
-  
+    printf("bcdDevice: %04x.\n", desc.bcdDevice);
+    printf("bDescritptorType: %d.\n", desc.bDescriptorType); 
 
     printf("%04x:%04x (bus %d, device %d).\n",
 			desc.idVendor, desc.idProduct,
